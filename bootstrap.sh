@@ -3,7 +3,7 @@
 #make start.sh executable
 chmod +x start.sh
 #install requeriments for python 
-pip3 install requeriments.txt
+pip3 install --upgrade -r requeriments.txt
 # remove AWS CLI version 1 and install CLI version 2
 y | sudo yum remove awscli
 cd /tmp

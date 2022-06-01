@@ -23,10 +23,7 @@ roleArn = f"{args.roleArn}"
 
 #Function for iot_core rule creation
 def CreateIoTRuleJSON(path, station_number, role_arn): #Inputs path and how many rules you like to create 
-    # #load role_arn
-    # with open(f"{path}/iot_rules/role_arn.json",) as file:
-    #     print(f"working from {path}")
-    #     role_arn = json.load(file)
+    
      
     n = station_number
     rule_out = {
@@ -187,21 +184,24 @@ def CreateIoTRuleJSON(path, station_number, role_arn): #Inputs path and how many
             
         
       
+    
+    
+    #Create profile
+    json_load = json.dumps(rule_out)
+    with open(f"{path}/iot_rules/iotcore_to_sitewise_rule_pumpingstation{n}.json", 'w') as outfile:
+        json.dump(rule_out, outfile)
+    
+      
     #Checks if a JSON rule profile already exists
     profile_exists = os.path.exists(f"{path}/iot_rules/iotcore_to_sitewise_rule_pumpingstation{n}.json")
     
     if profile_exists:
-        sp.getoutput(f"aws iot create-topic-rule --rule-name pumpingstation{n} --topic-rule-payload file://{path}/iot_rules/iotcore_to_sitewise_rule_pumpingstation{n}.json")
-        print(f"aws iot creat-topic-rule for pumpingstation{n}")
+        cmd = f"aws iot create-topic-rule --rule-name pumpingstation{n} --topic-rule-payload file://{path}/iot_rules/iotcore_to_sitewise_rule_pumpingstation{n}.json"
+        create_rule = sp.getoutput(cmd)
         
-        #If the profile is not present start configuration and file creation
-    else:
-        #Write to a file 
-        with open(f"{path}/iot_rules/iotcore_to_sitewise_rule_pumpingstation{n}.json", 'a') as outfile:
-              json.dump(rule_out, outfile)
-              print(f"IoT rule JSON profile created for pumping station {n}")
-        sp.getoutput(f"aws iot create-topic-rule --rule-name pumpingstation{n} --topic-rule-payload file://{path}/iot_rules/iotcore_to_sitewise_rule_pumpingstation{n}.json")
-        print(f"aws iot creat-topic-rule for pumpingstation{n}")
+        print(cmd)
+        print(create_rule)
+   
         
 
         

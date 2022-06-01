@@ -10,8 +10,10 @@ import argparse
 #get Argument
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--workspace-id", action="store", required=True, dest="workspace_id",)
+parser.add_argument("-r", "--model-id", action="store", required=True, dest="asset_model_id")
 args = parser.parse_args()
 workspace_id = args.workspace_id
+asset_model_id = args.asset_model_id
 
 
 #creates Grafana API KEy 
@@ -41,21 +43,8 @@ def GetGrafanaWorkspaceInfo(workspace_id):
     print(workspace_info)
     return(workspace_info)
   
-      
-        
-#Function to get the assetmodel ID 
-def GetAssetModelID():
-    get_asset_model_id = sp.getoutput("aws iotsitewise list-asset-models")
-    get_asset_model_id_json = json.loads(get_asset_model_id)
-    #checks the name and asset model ID, if "PumpingStation" is founds, passes ID into variable
-    if get_asset_model_id_json["assetModelSummaries"][0]["name"] == "PumpingStation":
-        asset_model_id = get_asset_model_id_json["assetModelSummaries"][0]["id"]
-        print (f"PumpingStation model id found,> {asset_model_id}")
-    else:
-        print ("model not no found check that you created your model with name  PumpingStation ")
-    return (asset_model_id)
 
-#funtion to list all assets 
+#function to list all assets 
 def GetAssetsId(asset_model_id,):
   get_assets_id_json = sp.getoutput(f"aws iotsitewise list-assets --asset-model-id {asset_model_id}")
   get_assets_id = json.loads(get_assets_id_json)
@@ -93,7 +82,7 @@ def ReadPropertyID(assets_info, n, number_of_attributes, number_of_messuraments)
 #pre-loop info
 grafana_workspace_Info = GetGrafanaWorkspaceInfo(workspace_id)
 grafana_workspace_ID = workspace_id
-asset_model_id = GetAssetModelID()
+
 assets_info = GetAssetsId(asset_model_id)
 
 #defines Grafana Access

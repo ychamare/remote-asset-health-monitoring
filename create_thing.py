@@ -25,6 +25,7 @@ def CreatePolicy():
     cli_cmd = f'aws iot create-policy --policy-name "pumping_station_simulation" --policy-document file://thing_policy.json'
     print(cli_cmd)
     create_policy_json = sp.getoutput(cli_cmd)
+    print(create_policy_json)
     create_policy = json.loads(create_policy_json)
     print(create_policy)
     policy_name = create_policy["policyName"]
@@ -69,12 +70,3 @@ policy_name = CreatePolicy()
 principal = CreateCertKeys()
 Attachpolicy(policy_name, principal)
 AttachCert(principal, thing_name)
-
-
-    
-# #Function for iot_core rule creation
-# def CreateIoTRuleJSON(path, station_number): #Inputs path and how many rules you like to create 
-#     #load role_arn
-#     with open(f"{path}/iot_rules/role_arn.json") as file:
-#         role_arn = json.load(file)
-    

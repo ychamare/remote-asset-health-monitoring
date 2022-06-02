@@ -3,8 +3,8 @@
 #make start.sh executable
 chmod +x start.sh
 #install requeriments for python 
-y | sudo pip install AWSIoTPythonSDK
-y | sudo pip install requests
+pip3 install AWSIoTPythonSDK
+pip3 install requests
 # remove AWS CLI version 1 and install CLI version 2
 y | sudo yum remove awscli
 cd /tmp
